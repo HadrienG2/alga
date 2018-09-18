@@ -8,13 +8,6 @@ use approx::{RelativeEq, UlpsEq};
 
 use general::{Field, Lattice, SubsetOf, SupersetOf};
 
-#[cfg(not(feature = "std"))]
-use libm::F32Ext;
-#[cfg(not(feature = "std"))]
-use libm::F64Ext;
-#[cfg(not(feature = "std"))]
-use num;
-
 #[allow(missing_docs)]
 
 /// Trait shared by all reals.
@@ -109,215 +102,582 @@ pub trait Real:
     fn ln_10() -> Self;
 }
 
+#[cfg(feature = "std")]
 macro_rules! impl_real(
-    ($($T:ty, $M:ident, $libm: ident);*) => ($(
+    ($($T:ty, $M:ident);*) => ($(
         impl Real for $T {
             #[inline]
             fn floor(self) -> Self {
-                $libm::floor(self)
+                self.floor()
             }
 
             #[inline]
             fn ceil(self) -> Self {
-                $libm::ceil(self)
+                self.ceil()
             }
 
             #[inline]
             fn round(self) -> Self {
-                $libm::round(self)
+                self.round()
             }
 
             #[inline]
             fn trunc(self) -> Self {
-                $libm::trunc(self)
+                self.trunc()
             }
 
             #[inline]
             fn fract(self) -> Self {
-                $libm::fract(self)
+                self.fract()
             }
 
             #[inline]
             fn abs(self) -> Self {
-                $libm::abs(self)
+                self.abs()
             }
 
             #[inline]
             fn signum(self) -> Self {
-                Signed::signum(&self)
+                self.signum()
             }
 
             #[inline]
             fn is_sign_positive(self) -> bool {
-                $M::is_sign_positive(self)
+                self.is_sign_positive()
             }
 
             #[inline]
             fn is_sign_negative(self) -> bool {
-                $M::is_sign_negative(self)
+                self.is_sign_negative()
             }
 
             #[inline]
             fn mul_add(self, a: Self, b: Self) -> Self {
-                $libm::mul_add(self, a, b)
+                self.mul_add(a, b)
             }
 
             #[inline]
             fn recip(self) -> Self {
-                $M::recip(self)
+                self.recip()
             }
 
-            #[cfg(feature = "std")]
             #[inline]
             fn powi(self, n: i32) -> Self {
                 self.powi(n)
             }
 
-            #[cfg(not(feature = "std"))]
-            #[inline]
-            fn powi(self, n: i32) -> Self {
-                // FIXME: is there a more efficient solution?
-                num::pow(self, n as usize)
-            }
-
             #[inline]
             fn powf(self, n: Self) -> Self {
-                $libm::powf(self, n)
+                self.powf(n)
             }
 
             #[inline]
             fn sqrt(self) -> Self {
-                $libm::sqrt(self)
+                self.sqrt()
             }
 
             #[inline]
             fn exp(self) -> Self {
-                $libm::exp(self)
+                self.exp()
             }
 
             #[inline]
             fn exp2(self) -> Self {
-                $libm::exp2(self)
+                self.exp2()
             }
 
             #[inline]
             fn ln(self) -> Self {
-                $libm::ln(self)
+                self.ln()
             }
 
             #[inline]
             fn log(self, base: Self) -> Self {
-                $libm::log(self, base)
+                self.log(base)
             }
 
             #[inline]
             fn log2(self) -> Self {
-                $libm::log2(self)
+                self.log2()
             }
 
             #[inline]
             fn log10(self) -> Self {
-                $libm::log10(self)
+                self.log10()
             }
 
             #[inline]
             fn max(self, other: Self) -> Self {
-                $M::max(self, other)
+                self.max(other)
             }
 
             #[inline]
             fn min(self, other: Self) -> Self {
-                $M::min(self, other)
+                self.min(other)
             }
 
             #[inline]
             fn cbrt(self) -> Self {
-                $libm::cbrt(self)
+                self.cbrt()
             }
 
             #[inline]
             fn hypot(self, other: Self) -> Self {
-                $libm::hypot(self, other)
+                self.hypot(other)
             }
 
             #[inline]
             fn sin(self) -> Self {
-                $libm::sin(self)
+                self.sin()
             }
 
             #[inline]
             fn cos(self) -> Self {
-                $libm::cos(self)
+                self.cos()
             }
 
             #[inline]
             fn tan(self) -> Self {
-                $libm::tan(self)
+                self.tan()
             }
 
             #[inline]
             fn asin(self) -> Self {
-                $libm::asin(self)
+                self.asin()
             }
 
             #[inline]
             fn acos(self) -> Self {
-                $libm::acos(self)
+                self.acos()
             }
 
             #[inline]
             fn atan(self) -> Self {
-                $libm::atan(self)
+                self.atan()
             }
 
             #[inline]
             fn atan2(self, other: Self) -> Self {
-                $libm::atan2(self, other)
+                self.atan2(other)
             }
 
             #[inline]
             fn sin_cos(self) -> (Self, Self) {
-                $libm::sin_cos(self)
+                self.sin_cos()
             }
 
             #[inline]
             fn exp_m1(self) -> Self {
-                $libm::exp_m1(self)
+                self.exp_m1()
             }
 
             #[inline]
             fn ln_1p(self) -> Self {
-                $libm::ln_1p(self)
+                self.ln_1p()
             }
 
             #[inline]
             fn sinh(self) -> Self {
-                $libm::sinh(self)
+                self.sinh()
             }
 
             #[inline]
             fn cosh(self) -> Self {
-                $libm::cosh(self)
+                self.cosh()
             }
 
             #[inline]
             fn tanh(self) -> Self {
-                $libm::tanh(self)
+                self.tanh()
             }
 
             #[inline]
             fn asinh(self) -> Self {
-                $libm::asinh(self)
+                self.asinh()
             }
 
             #[inline]
             fn acosh(self) -> Self {
-                $libm::acosh(self)
+                self.acosh()
             }
 
             #[inline]
             fn atanh(self) -> Self {
-                $libm::atanh(self)
+                self.atanh()
+            }
+
+            /// Archimedes' constant.
+            #[inline]
+            fn pi() -> Self {
+                $M::consts::PI
+            }
+
+            /// 2.0 * pi.
+            #[inline]
+            fn two_pi() -> Self {
+                $M::consts::PI + $M::consts::PI
+            }
+
+            /// pi / 2.0.
+            #[inline]
+            fn frac_pi_2() -> Self {
+                $M::consts::FRAC_PI_2
+            }
+
+            /// pi / 3.0.
+            #[inline]
+            fn frac_pi_3() -> Self {
+                $M::consts::FRAC_PI_3
+            }
+
+            /// pi / 4.0.
+            #[inline]
+            fn frac_pi_4() -> Self {
+                $M::consts::FRAC_PI_4
+            }
+
+            /// pi / 6.0.
+            #[inline]
+            fn frac_pi_6() -> Self {
+                $M::consts::FRAC_PI_6
+            }
+
+            /// pi / 8.0.
+            #[inline]
+            fn frac_pi_8() -> Self {
+                $M::consts::FRAC_PI_8
+            }
+
+            /// 1.0 / pi.
+            #[inline]
+            fn frac_1_pi() -> Self {
+                $M::consts::FRAC_1_PI
+            }
+
+            /// 2.0 / pi.
+            #[inline]
+            fn frac_2_pi() -> Self {
+                $M::consts::FRAC_2_PI
+            }
+
+            /// 2.0 / sqrt(pi).
+            #[inline]
+            fn frac_2_sqrt_pi() -> Self {
+                $M::consts::FRAC_2_SQRT_PI
+            }
+
+
+            /// Euler's number.
+            #[inline]
+            fn e() -> Self {
+                $M::consts::E
+            }
+
+            /// log2(e).
+            #[inline]
+            fn log2_e() -> Self {
+                $M::consts::LOG2_E
+            }
+
+            /// log10(e).
+            #[inline]
+            fn log10_e() -> Self {
+                $M::consts::LOG10_E
+            }
+
+            /// ln(2.0).
+            #[inline]
+            fn ln_2() -> Self {
+                $M::consts::LN_2
+            }
+
+            /// ln(10.0).
+            #[inline]
+            fn ln_10() -> Self {
+                $M::consts::LN_10
+            }
+        }
+    )*)
+);
+
+#[cfg(feature = "std")]
+impl_real!(f32,f32; f64,f64);
+#[cfg(decimal)]
+impl_real!(decimal::d128, decimal::d128);
+
+#[cfg(not(feature = "std"))]
+macro_rules! impl_real_core(
+    ($($T:ty, $M: ident,
+       $alga_cbrt: ident,
+       $alga_hypot: ident,
+       $alga_sin: ident,
+       $alga_cos: ident,
+       $alga_tan: ident,
+       $alga_asin: ident,
+       $alga_acos: ident,
+       $alga_atan: ident,
+       $alga_atan2: ident,
+       $alga_exp_m1: ident,
+       $alga_ln_1p: ident,
+       $alga_sinh: ident,
+       $alga_cosh: ident,
+       $alga_tanh: ident,
+       $alga_asinh: ident,
+       $alga_acosh: ident,
+       $alga_atanh: ident,
+       $alga_powi: ident,
+       $alga_powf: ident,
+       $alga_sqrt: ident,
+       $alga_exp: ident,
+       $alga_exp2: ident,
+       $alga_ln: ident,
+       $alga_log: ident,
+       $alga_log2: ident,
+       $alga_log10: ident,
+       $alga_mul_add: ident,
+       $alga_floor: ident,
+       $alga_ceil: ident,
+       $alga_round: ident,
+       $alga_trunc: ident,
+       $alga_fract: ident,
+       $alga_abs: ident,
+       $alga_signum: ident);*) => ($(
+        extern "Rust" {
+            fn $alga_cbrt(val: $T) -> $T;
+            fn $alga_hypot(val: $T, other: $T) -> $T;
+            fn $alga_sin(val: $T) -> $T;
+            fn $alga_cos(val: $T) -> $T;
+            fn $alga_tan(val: $T) -> $T;
+            fn $alga_asin(val: $T) -> $T;
+            fn $alga_acos(val: $T) -> $T;
+            fn $alga_atan(val: $T) -> $T;
+            fn $alga_atan2(val: $T, other: $T) -> $T;
+            fn $alga_exp_m1(val: $T) -> $T;
+            fn $alga_ln_1p(val: $T) -> $T;
+            fn $alga_sinh(val: $T) -> $T;
+            fn $alga_cosh(val: $T) -> $T;
+            fn $alga_tanh(val: $T) -> $T;
+            fn $alga_asinh(val: $T) -> $T;
+            fn $alga_acosh(val: $T) -> $T;
+            fn $alga_atanh(val: $T) -> $T;
+            fn $alga_powi(val: $T, n: i32) -> $T;
+            fn $alga_powf(val: $T, n: $T) -> $T;
+            fn $alga_sqrt(val: $T) -> $T;
+            fn $alga_exp(val: $T) -> $T;
+            fn $alga_exp2(val: $T) -> $T;
+            fn $alga_ln(val: $T) -> $T;
+            fn $alga_log(val: $T, base: $T) -> $T;
+            fn $alga_log2(val: $T) -> $T;
+            fn $alga_log10(val: $T) -> $T;
+            fn $alga_mul_add(val: $T, a: $T, b: $T) -> $T;
+            fn $alga_floor(val: $T) -> $T;
+            fn $alga_ceil(val: $T) -> $T;
+            fn $alga_round(val: $T) -> $T;
+            fn $alga_trunc(val: $T) -> $T;
+            fn $alga_fract(val: $T) -> $T;
+            fn $alga_abs(val: $T) -> $T;
+            fn $alga_signum(val: $T) -> $T;
+        }
+
+        impl Real for $T {
+            #[inline]
+            fn floor(self) -> Self {
+                unsafe { $alga_floor(self) }
+            }
+
+            #[inline]
+            fn ceil(self) -> Self {
+                unsafe { $alga_ceil(self) }
+            }
+
+            #[inline]
+            fn round(self) -> Self {
+                unsafe { $alga_round(self) }
+            }
+
+            #[inline]
+            fn trunc(self) -> Self {
+                unsafe { $alga_trunc(self) }
+            }
+
+            #[inline]
+            fn fract(self) -> Self {
+                unsafe { $alga_fract(self) }
+            }
+
+            #[inline]
+            fn abs(self) -> Self {
+                unsafe { $alga_abs(self) }
+            }
+
+            #[inline]
+            fn signum(self) -> Self {
+                unsafe { $alga_signum(self) }
+            }
+
+            #[inline]
+            fn is_sign_positive(self) -> bool {
+                self.is_sign_positive()
+            }
+
+            #[inline]
+            fn is_sign_negative(self) -> bool {
+                self.is_sign_negative()
+            }
+
+            #[inline]
+            fn mul_add(self, a: Self, b: Self) -> Self {
+                unsafe { $alga_mul_add(self, a, b) }
+            }
+
+            #[inline]
+            fn recip(self) -> Self {
+                self.recip()
+            }
+
+            #[inline]
+            fn powi(self, n: i32) -> Self {
+                unsafe { $alga_powi(self, n) }
+            }
+
+            #[inline]
+            fn powf(self, n: Self) -> Self {
+                unsafe { $alga_powf(self, n) }
+            }
+
+            #[inline]
+            fn sqrt(self) -> Self {
+                unsafe { $alga_sqrt(self) }
+            }
+
+            #[inline]
+            fn exp(self) -> Self {
+                unsafe { $alga_exp(self) }
+            }
+
+            #[inline]
+            fn exp2(self) -> Self {
+                unsafe { $alga_exp2(self) }
+            }
+
+            #[inline]
+            fn ln(self) -> Self {
+                unsafe { $alga_ln(self) }
+            }
+
+            #[inline]
+            fn log(self, base: Self) -> Self {
+                unsafe { $alga_log(self, base) }
+            }
+
+            #[inline]
+            fn log2(self) -> Self {
+                unsafe { $alga_log2(self) }
+            }
+
+            #[inline]
+            fn log10(self) -> Self {
+                unsafe { $alga_log10(self) }
+            }
+
+            #[inline]
+            fn max(self, other: Self) -> Self {
+                self.min(other)
+            }
+
+            #[inline]
+            fn min(self, other: Self) -> Self {
+                self.max(other)
+            }
+
+            #[inline]
+            fn cbrt(self) -> Self {
+                unsafe { $alga_cbrt(self) }
+            }
+
+            #[inline]
+            fn hypot(self, other: Self) -> Self {
+                unsafe { $alga_hypot(self, other) }
+            }
+
+            #[inline]
+            fn sin(self) -> Self {
+                unsafe { $alga_sin(self) }
+            }
+
+            #[inline]
+            fn cos(self) -> Self {
+                unsafe { $alga_cos(self) }
+            }
+
+            #[inline]
+            fn tan(self) -> Self {
+                unsafe { $alga_tan(self) }
+            }
+
+            #[inline]
+            fn asin(self) -> Self {
+                unsafe { $alga_asin(self) }
+            }
+
+            #[inline]
+            fn acos(self) -> Self {
+                unsafe { $alga_acos(self) }
+            }
+
+            #[inline]
+            fn atan(self) -> Self {
+                unsafe { $alga_atan(self) }
+            }
+
+            #[inline]
+            fn atan2(self, other: Self) -> Self {
+                unsafe { $alga_atan2(self, other) }
+            }
+
+            #[inline]
+            fn sin_cos(self) -> (Self, Self) {
+                unsafe { ($alga_sin(self), $alga_cos(self)) }
+            }
+
+            #[inline]
+            fn exp_m1(self) -> Self {
+                unsafe { $alga_exp_m1(self) }
+            }
+
+            #[inline]
+            fn ln_1p(self) -> Self {
+                unsafe { $alga_ln_1p(self) }
+            }
+
+            #[inline]
+            fn sinh(self) -> Self {
+                unsafe { $alga_sinh(self) }
+            }
+
+            #[inline]
+            fn cosh(self) -> Self {
+                unsafe { $alga_cosh(self) }
+            }
+
+            #[inline]
+            fn tanh(self) -> Self {
+                unsafe { $alga_tanh(self) }
+            }
+
+            #[inline]
+            fn asinh(self) -> Self {
+                unsafe { $alga_asinh(self) }
+            }
+
+            #[inline]
+            fn acosh(self) -> Self {
+                unsafe { $alga_acosh(self) }
+            }
+
+            #[inline]
+            fn atanh(self) -> Self {
+                unsafe { $alga_atanh(self) }
             }
 
             /// Archimedes' constant.
@@ -415,8 +775,75 @@ macro_rules! impl_real(
 );
 
 #[cfg(not(feature = "std"))]
-impl_real!(f32,f32,F32Ext; f64,f64,F64Ext);
-#[cfg(feature = "std")]
-impl_real!(f32,f32,f32; f64,f64,f64);
-#[cfg(decimal)]
-impl_real!(decimal::d128, decimal::d128);
+impl_real_core!(
+    f32, f32,
+    alga_cbrt_f32,
+    alga_hypot_f32,
+    alga_sin_f32,
+    alga_cos_f32,
+    alga_tan_f32,
+    alga_asin_f32,
+    alga_acos_f32,
+    alga_atan_f32,
+    alga_atan2_f32,
+    alga_exp_m1_f32,
+    alga_ln_1p_f32,
+    alga_sinh_f32,
+    alga_cosh_f32,
+    alga_tanh_f32,
+    alga_asinh_f32,
+    alga_acosh_f32,
+    alga_atanh_f32,
+    alga_powi_f32,
+    alga_powf_f32,
+    alga_sqrt_f32,
+    alga_exp_f32,
+    alga_exp2_f32,
+    alga_ln_f32,
+    alga_log_f32,
+    alga_log2_f32,
+    alga_log10_f32,
+    alga_mul_add_f32,
+    alga_floor_f32,
+    alga_ceil_f32,
+    alga_round_f32,
+    alga_trunc_f32,
+    alga_fract_f32,
+    alga_abs_f32,
+    alga_signum_f32;
+    f64, f64,
+    alga_cbrt_f64,
+    alga_hypot_f64,
+    alga_sin_f64,
+    alga_cos_f64,
+    alga_tan_f64,
+    alga_asin_f64,
+    alga_acos_f64,
+    alga_atan_f64,
+    alga_atan2_f64,
+    alga_exp_m1_f64,
+    alga_ln_1p_f64,
+    alga_sinh_f64,
+    alga_cosh_f64,
+    alga_tanh_f64,
+    alga_asinh_f64,
+    alga_acosh_f64,
+    alga_atanh_f64,
+    alga_powi_f64,
+    alga_powf_f64,
+    alga_sqrt_f64,
+    alga_exp_f64,
+    alga_exp2_f64,
+    alga_ln_f64,
+    alga_log_f64,
+    alga_log2_f64,
+    alga_log10_f64,
+    alga_mul_add_f64,
+    alga_floor_f64,
+    alga_ceil_f64,
+    alga_round_f64,
+    alga_trunc_f64,
+    alga_fract_f64,
+    alga_abs_f64,
+    alga_signum_f64
+);
